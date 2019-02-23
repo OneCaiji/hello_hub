@@ -1,2 +1,2 @@
 # hello_hub
-just one respository
+to post something about python
