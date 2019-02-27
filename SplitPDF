@@ -1,0 +1,44 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Oct 19 15:07:50 2018
+
+@author: onepiecegx
+"""
+
+from PyPDF2 import PdfFileReader,PdfFileWriter
+import time
+
+
+def writePdf(pdf_path,page_list):
+    #读取pdf文件可能出错
+    pdf_in = PdfFileReader(pdf_path)
+    pdf_out = PdfFileWriter()
+    for page_index in page_list:
+        page = pdf_in.getPage(int(page_index))
+        pdf_out.addPage(page)
+    #写入pdf文件可能报错
+    pdf_out.write(open(r'%PATH%.pdf'.format(time.strftime('%H%M%S')),'wb'))
+
+def getPageList(page_str):
+    page_str_list = page_str.split(',')
+    page_list = []
+    for index in page_str_list:
+        if index.find('-') == -1:
+            page_list.append(int(index) - 1)
+        else:
+            temp = index.split('-')
+            for i in range(int(temp[0])-1,int(temp[1])):
+                page_list.append(i)
+                
+    return page_list
+            
+
+if __name__ == '__main__':
+    pdf_path = input('Enter the path of PDF file：')
+    #判断文件是否存在且为pdf
+    page_str = input('Enter the pages you want：(e.g. 1,5-10,13)')
+    #判断页码格式是否正确，是否超出
+    page_list = getPageList(page_str)
+    writePdf(pdf_path,page_list)
+    print('Split Completed')
+    
